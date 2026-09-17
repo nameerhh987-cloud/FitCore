@@ -1,6 +1,8 @@
 /* ============================================================
-   FitCore Gym North Nazimabad — Master Application Script
-   Interactive UI, High-Performance Carousel, and Visuals
+   THE LAB ATHLETIC CLUB — Master Application Script
+   Three.js 3D Kinetic Space, Animated Stats, Magnetic CTAs,
+   3D Card Tilt, Parallax & Full UI Logic
+   Sunset Blvd • Los Angeles, CA
    ============================================================ */
 
 const ICON_PATHS = {
@@ -24,7 +26,7 @@ const ICON_PATHS = {
   'chevron-down':  '<polyline points="6 9 12 15 18 9"/>',
   'chevron-left':  '<polyline points="15 18 9 12 15 6"/>',
   'chevron-right': '<polyline points="9 18 15 12 9 6"/>',
-  'trophy':        '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/>',
+  'trophy':        '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/>'
 };
 
 function renderIcon(name, extraClass) {
@@ -34,6 +36,7 @@ function renderIcon(name, extraClass) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  initThreeScene();
   initNavbar();
   renderStats();
   renderPrograms();
@@ -46,67 +49,364 @@ document.addEventListener('DOMContentLoaded', () => {
   initContactForm();
   initBackToTop();
   initScrollAnimations();
+  init3DTilt();
+  initMagneticButtons();
+  initStatCounters();
 });
 
-/* ------------------------------------------------------------
-   Sticky Header, Drawer & Smooth Anchor Scroll
-   ------------------------------------------------------------ */
-function initNavbar() {
-  const navbar = document.getElementById('navbar');
-  const toggle = document.querySelector('.nav-toggle');
-  const drawer = document.querySelector('.nav-drawer');
-  const navLinks = document.querySelectorAll('.nav-link');
+/* ============================================================
+   THREE.JS — PREMIUM 3D KINETIC BACKGROUND
+   Particle Nebula + Geometric Core + Orbiting Bodies
+   ============================================================ */
+function initThreeScene() {
+  const canvas = document.getElementById('webgl-canvas');
+  if (!canvas || typeof THREE === 'undefined') return;
 
-  // Scroll listener for sticky navbar shadow
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 20) {
-      navbar.classList.add('scrolled');
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x050507, 0.0014);
+
+  const camera = new THREE.PerspectiveCamera(58, window.innerWidth / window.innerHeight, 0.1, 2400);
+  camera.position.set(0, 0, 440);
+
+  const renderer = new THREE.WebGLRenderer({
+    canvas,
+    alpha: true,
+    antialias: window.devicePixelRatio < 2,
+    powerPreference: 'high-performance'
+  });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  /* ── LIGHTING ── */
+  const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.6);
+  scene.add(ambientLight);
+
+  const crimsonLight = new THREE.PointLight(0xE50914, 4.5, 1100);
+  crimsonLight.position.set(180, 160, 220);
+  scene.add(crimsonLight);
+
+  const scarletLight = new THREE.PointLight(0xFF3040, 3.0, 900);
+  scarletLight.position.set(-220, -120, 160);
+  scene.add(scarletLight);
+
+  const rimLight = new THREE.PointLight(0xFFFFFF, 1.2, 600);
+  rimLight.position.set(0, -200, 300);
+  scene.add(rimLight);
+
+  /* ── 1. PARTICLE CONSTELLATION ── */
+  const isMobile = window.innerWidth < 768;
+  const particleCount = isMobile ? 800 : 1800;
+  const pGeo = new THREE.BufferGeometry();
+  const pPos = new Float32Array(particleCount * 3);
+  const pCol = new Float32Array(particleCount * 3);
+
+  const C1 = new THREE.Color(0xE50914);
+  const C2 = new THREE.Color(0xFF3040);
+  const CW = new THREE.Color(0xFFFFFF);
+  const CD = new THREE.Color(0x660008);
+
+  for (let i = 0; i < particleCount; i++) {
+    const i3 = i * 3;
+    pPos[i3]     = (Math.random() - 0.5) * 2200;
+    pPos[i3 + 1] = (Math.random() - 0.5) * 1800;
+    pPos[i3 + 2] = (Math.random() - 0.5) * 1600;
+
+    const r = Math.random();
+    const col = r < 0.5 ? C1 : r < 0.72 ? C2 : r < 0.88 ? CW : CD;
+    pCol[i3]     = col.r;
+    pCol[i3 + 1] = col.g;
+    pCol[i3 + 2] = col.b;
+  }
+  pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+  pGeo.setAttribute('color',    new THREE.BufferAttribute(pCol, 3));
+
+  const makeDotTex = () => {
+    const c = document.createElement('canvas');
+    c.width = c.height = 32;
+    const ctx = c.getContext('2d');
+    const g = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
+    g.addColorStop(0,    'rgba(255,255,255,1)');
+    g.addColorStop(0.22, 'rgba(255,48,64,0.95)');
+    g.addColorStop(0.6,  'rgba(229,9,20,0.28)');
+    g.addColorStop(1,    'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, 32, 32);
+    return new THREE.CanvasTexture(c);
+  };
+
+  const pMat = new THREE.PointsMaterial({
+    size: isMobile ? 4.5 : 5.8,
+    map: makeDotTex(),
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.88,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
+  });
+  const particles = new THREE.Points(pGeo, pMat);
+  scene.add(particles);
+
+  /* ── 2. CORE 3D GEOMETRIC STRUCTURE ── */
+  const coreGroup = new THREE.Group();
+
+  // Deep glowing inner octahedron
+  const coreGeo = new THREE.OctahedronGeometry(62, 0);
+  const coreMat = new THREE.MeshPhongMaterial({
+    color: 0x8C050E,
+    emissive: 0x520008,
+    specular: 0xFF3040,
+    shininess: 160,
+    flatShading: true,
+    transparent: true,
+    opacity: 0.9
+  });
+  const coreMesh = new THREE.Mesh(coreGeo, coreMat);
+  coreGroup.add(coreMesh);
+
+  // Mid wireframe dodecahedron
+  const dodGeo = new THREE.DodecahedronGeometry(100, 0);
+  const dodMat = new THREE.MeshBasicMaterial({
+    color: 0xE50914,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.22
+  });
+  const dodMesh = new THREE.Mesh(dodGeo, dodMat);
+  coreGroup.add(dodMesh);
+
+  // Outer icosahedron cage
+  const icoGeo = new THREE.IcosahedronGeometry(138, 2);
+  const icoMat = new THREE.MeshBasicMaterial({
+    color: 0xFF3040,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.18
+  });
+  const icoMesh = new THREE.Mesh(icoGeo, icoMat);
+  coreGroup.add(icoMesh);
+
+  // Gimbal ring 1
+  const ring1Geo = new THREE.TorusGeometry(182, 1.6, 16, 120);
+  const ring1Mat = new THREE.MeshBasicMaterial({ color: 0xFF3040, wireframe: true, transparent: true, opacity: 0.42 });
+  const ring1 = new THREE.Mesh(ring1Geo, ring1Mat);
+  ring1.rotation.x = Math.PI / 2.8;
+  coreGroup.add(ring1);
+
+  // Gimbal ring 2
+  const ring2Geo = new THREE.TorusGeometry(210, 1.2, 16, 120);
+  const ring2Mat = new THREE.MeshBasicMaterial({ color: 0xE50914, wireframe: true, transparent: true, opacity: 0.28 });
+  const ring2 = new THREE.Mesh(ring2Geo, ring2Mat);
+  ring2.rotation.y = Math.PI / 3.2;
+  coreGroup.add(ring2);
+
+  // Gimbal ring 3 (tilted)
+  const ring3Geo = new THREE.TorusGeometry(245, 0.9, 16, 120);
+  const ring3Mat = new THREE.MeshBasicMaterial({ color: 0xFF6070, wireframe: true, transparent: true, opacity: 0.15 });
+  const ring3 = new THREE.Mesh(ring3Geo, ring3Mat);
+  ring3.rotation.z = Math.PI / 4;
+  ring3.rotation.x = Math.PI / 5;
+  coreGroup.add(ring3);
+
+  /* ── 3. FLOATING SATELLITE BODIES ── */
+  const satelliteGroup = new THREE.Group();
+
+  const satelliteData = [
+    { geo: new THREE.TetrahedronGeometry(18, 0), r: 290, speed: 0.38, phase: 0,       tilt: 0.4, opacity: 0.75 },
+    { geo: new THREE.OctahedronGeometry(14, 0),  r: 320, speed: 0.24, phase: 2.1,    tilt: 0.9, opacity: 0.6  },
+    { geo: new THREE.IcosahedronGeometry(10, 0), r: 355, speed: 0.18, phase: 4.2,    tilt: 1.2, opacity: 0.5  },
+    { geo: new THREE.TetrahedronGeometry(22, 0), r: 260, speed: 0.55, phase: 1.05,   tilt: 0.3, opacity: 0.85 },
+    { geo: new THREE.OctahedronGeometry(16, 0),  r: 300, speed: 0.32, phase: 3.14,   tilt: 0.7, opacity: 0.65 },
+  ];
+
+  const satMeshes = satelliteData.map(d => {
+    const mat = new THREE.MeshPhongMaterial({
+      color: 0xE50914,
+      emissive: 0x3A0005,
+      specular: 0xFF3040,
+      shininess: 200,
+      flatShading: true,
+      transparent: true,
+      opacity: d.opacity
+    });
+    const mesh = new THREE.Mesh(d.geo, mat);
+    satelliteGroup.add(mesh);
+    return { mesh, ...d };
+  });
+
+  coreGroup.add(satelliteGroup);
+  scene.add(coreGroup);
+
+  /* ── POSITION BASED ON SCREEN SIZE ── */
+  const update3DPos = () => {
+    if (window.innerWidth < 1040) {
+      coreGroup.position.set(0, 10, -100);
+      coreGroup.scale.setScalar(0.7);
     } else {
-      navbar.classList.remove('scrolled');
+      coreGroup.position.set(260, 20, -40);
+      coreGroup.scale.setScalar(1);
     }
+  };
+  update3DPos();
+
+  /* ── MOUSE / TOUCH / SCROLL TRACKING ── */
+  let mouseX = 0, mouseY = 0;
+  let targetX = 0, targetY = 0;
+  let scrollY  = 0;
+
+  const halfW = window.innerWidth  / 2;
+  const halfH = window.innerHeight / 2;
+
+  window.addEventListener('mousemove', e => {
+    mouseX = (e.clientX - halfW) * 0.3;
+    mouseY = (e.clientY - halfH) * 0.3;
+  }, { passive: true });
+
+  window.addEventListener('touchmove', e => {
+    if (e.touches.length > 0) {
+      mouseX = (e.touches[0].clientX - halfW) * 0.2;
+      mouseY = (e.touches[0].clientY - halfH) * 0.2;
+    }
+  }, { passive: true });
+
+  window.addEventListener('scroll', () => { scrollY = window.scrollY; }, { passive: true });
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    update3DPos();
+  }, { passive: true });
+
+  /* ── RENDER LOOP ── */
+  const clock = new THREE.Clock();
+
+  (function renderFrame() {
+    requestAnimationFrame(renderFrame);
+    const t = clock.getElapsedTime();
+
+    // Smooth mouse lerp
+    targetX += (mouseX - targetX) * 0.04;
+    targetY += (mouseY - targetY) * 0.04;
+
+    // Scroll parallax
+    const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    const scrollPct = Math.min(1, Math.max(0, scrollY / maxScroll));
+
+    // Camera float
+    camera.position.x = targetX * 0.4;
+    camera.position.y = -targetY * 0.4 - scrollPct * 200;
+    camera.lookAt(0, -scrollPct * 120, 0);
+
+    // Core group rotation
+    coreGroup.rotation.x += 0.0024;
+    coreGroup.rotation.y += 0.0038;
+
+    // Inner rings independent rotation
+    ring1.rotation.z += 0.006;
+    ring2.rotation.x += 0.004;
+    ring3.rotation.y += 0.003;
+    ring3.rotation.z += 0.002;
+
+    // Dodecahedron spins opposite
+    dodMesh.rotation.x -= 0.003;
+    dodMesh.rotation.z += 0.002;
+
+    // Inner core breathes
+    const breathe = 0.97 + Math.sin(t * 2.2) * 0.05;
+    coreMesh.scale.setScalar(breathe);
+
+    // Satellites orbit
+    satMeshes.forEach(s => {
+      const angle = t * s.speed + s.phase;
+      s.mesh.position.x = Math.cos(angle) * s.r;
+      s.mesh.position.y = Math.sin(angle * 0.62 + s.tilt) * (s.r * 0.4);
+      s.mesh.position.z = Math.sin(angle) * (s.r * 0.55);
+      s.mesh.rotation.x += 0.02;
+      s.mesh.rotation.y += 0.015;
+
+      // Pulse emissive
+      const pulse = (Math.sin(t * 1.8 + s.phase) + 1) * 0.5;
+      s.mesh.material.emissiveIntensity = 0.3 + pulse * 0.7;
+    });
+
+    // Crimson light orbits
+    crimsonLight.position.x = Math.sin(t * 0.4) * 300;
+    crimsonLight.position.z = Math.cos(t * 0.4) * 200;
+    scarletLight.position.x = Math.cos(t * 0.3 + 1.5) * 280;
+    scarletLight.position.y = Math.sin(t * 0.5)  * 180;
+
+    // Particles drift
+    particles.rotation.y = t * 0.018;
+    particles.rotation.x = t * 0.009;
+
+    renderer.render(scene, camera);
+  })();
+}
+
+/* ============================================================
+   FIXED LUXURY NAVBAR & MOBILE DRAWER CONTROLLER
+   ============================================================ */
+function initNavbar() {
+  const navbar  = document.getElementById('navbar');
+  const toggle  = document.querySelector('.nav-toggle');
+  const drawer  = document.getElementById('navDrawer');
+  const navLinks    = document.querySelectorAll('.nav-link');
+  const drawerLinks = document.querySelectorAll('.drawer-link');
+
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 15);
     highlightActiveNav();
   }, { passive: true });
 
-  // Mobile toggle button
+  const closeDrawer = () => {
+    if (drawer && drawer.classList.contains('open')) {
+      drawer.classList.remove('open');
+      toggle.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+      drawer.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('nav-open');
+    }
+  };
+
+  const openDrawer = () => {
+    if (drawer) {
+      drawer.classList.add('open');
+      toggle.classList.add('open');
+      toggle.setAttribute('aria-expanded', 'true');
+      drawer.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('nav-open');
+    }
+  };
+
   if (toggle && drawer) {
-    toggle.addEventListener('click', (e) => {
+    toggle.addEventListener('click', e => {
       e.stopPropagation();
-      const isOpen = drawer.classList.toggle('open');
-      toggle.classList.toggle('open', isOpen);
-      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      drawer.classList.contains('open') ? closeDrawer() : openDrawer();
     });
 
-    // Close mobile drawer when clicking any link inside
-    drawer.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        drawer.classList.remove('open');
-        toggle.classList.remove('open');
-        toggle.setAttribute('aria-expanded', 'false');
-      });
+    drawerLinks.forEach(link => link.addEventListener('click', closeDrawer));
+
+    document.addEventListener('click', e => {
+      if (drawer.classList.contains('open') && !navbar.contains(e.target)) closeDrawer();
     });
 
-    // Close when clicking outside drawer
-    document.addEventListener('click', (e) => {
-      if (!navbar.contains(e.target) && drawer.classList.contains('open')) {
-        drawer.classList.remove('open');
-        toggle.classList.remove('open');
-        toggle.setAttribute('aria-expanded', 'false');
-      }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && drawer.classList.contains('open')) closeDrawer();
     });
   }
 
-  // Smooth scroll offset compensation for sticky navbar
+  // Smooth scroll offset
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
-      const targetId = this.getAttribute('href');
-      if (targetId === '#') return;
-      const targetEl = document.querySelector(targetId);
-      if (targetEl) {
+      const id = this.getAttribute('href');
+      if (id === '#') return;
+      const target = document.querySelector(id);
+      if (target) {
         e.preventDefault();
-        const navHeight = navbar.offsetHeight || 72;
-        const targetPos = targetEl.getBoundingClientRect().top + window.pageYOffset - (navHeight + 10);
+        const navH = navbar.offsetHeight || 78;
         window.scrollTo({
-          top: targetPos,
+          top: target.getBoundingClientRect().top + window.pageYOffset - navH - 6,
           behavior: 'smooth'
         });
       }
@@ -116,49 +416,153 @@ function initNavbar() {
   // Active link scrollspy
   const sections = document.querySelectorAll('section[id]');
   function highlightActiveNav() {
-    const scrollPos = window.scrollY + 140;
+    const pos = window.scrollY + 160;
     sections.forEach(sec => {
-      const top = sec.offsetTop;
-      const height = sec.offsetHeight;
-      const id = sec.getAttribute('id');
-      if (scrollPos >= top && scrollPos < top + height) {
-        navLinks.forEach(link => {
-          link.classList.remove('active');
-          if (link.getAttribute('href') === '#' + id) {
-            link.classList.add('active');
-          }
+      const top = sec.offsetTop, h = sec.offsetHeight, id = sec.id;
+      if (pos >= top && pos < top + h) {
+        navLinks.forEach(l => {
+          l.classList.remove('active');
+          if (l.getAttribute('href') === '#' + id) l.classList.add('active');
+        });
+        drawerLinks.forEach(l => {
+          l.classList.remove('active');
+          if (l.getAttribute('href') === '#' + id) l.classList.add('active');
         });
       }
     });
   }
 }
 
-/* ------------------------------------------------------------
-   Stats Counter
-   ------------------------------------------------------------ */
+/* ============================================================
+   3D CARD TILT WITH DYNAMIC GLARE (DESKTOP ONLY)
+   ============================================================ */
+function init3DTilt() {
+  if (window.matchMedia('(pointer: coarse)').matches) return;
+
+  const cards = document.querySelectorAll(
+    '.program-card, .trainer-card, .pricing-card, .testimonial-card, .hero-card-float, .stat-item'
+  );
+
+  cards.forEach(card => {
+    if (!card.querySelector('.card-shine')) {
+      const shine = document.createElement('div');
+      shine.className = 'card-shine';
+      card.appendChild(shine);
+    }
+
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const cx = rect.width  / 2;
+      const cy = rect.height / 2;
+
+      const rotX = ((y - cy) / cy) * -9;
+      const rotY = ((x - cx) / cx) *  9;
+
+      card.style.setProperty('--mouse-x', `${(x / rect.width)  * 100}%`);
+      card.style.setProperty('--mouse-y', `${(y / rect.height) * 100}%`);
+      card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateZ(8px) scale3d(1.02, 1.02, 1.02)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0) scale3d(1,1,1)';
+    });
+  });
+}
+
+/* ============================================================
+   MAGNETIC BUTTON EFFECT (DESKTOP CTA BUTTONS)
+   ============================================================ */
+function initMagneticButtons() {
+  if (window.matchMedia('(pointer: coarse)').matches) return;
+
+  document.querySelectorAll('.btn-primary, .btn-outline').forEach(btn => {
+    btn.addEventListener('mousemove', e => {
+      const rect = btn.getBoundingClientRect();
+      const dx = e.clientX - (rect.left + rect.width  / 2);
+      const dy = e.clientY - (rect.top  + rect.height / 2);
+      btn.style.transform = `translate(${dx * 0.22}px, ${dy * 0.22}px)`;
+    });
+
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform = '';
+    });
+  });
+}
+
+/* ============================================================
+   ANIMATED STAT COUNTERS (SCROLL-TRIGGERED)
+   ============================================================ */
+function initStatCounters() {
+  const statValues = document.querySelectorAll('.stat-value');
+  if (!statValues.length) return;
+
+  const animateCounter = el => {
+    const target = el.textContent.trim();
+
+    // Check if it's purely numeric (possibly with suffix like +, %)
+    const numeric = target.match(/^(\d+[\d.,]*)([^\d]*)$/);
+    if (!numeric) return; // Non-numeric like "4.9★", "ELITE", "LA", "FREE" — leave as-is
+
+    const numPart = parseFloat(numeric[1].replace(/,/g, ''));
+    const suffix  = numeric[2] || '';
+    const duration = 1800;
+    const start = performance.now();
+
+    const tick = now => {
+      const elapsed  = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased    = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+      const current  = Math.round(numPart * eased);
+      el.textContent = current.toLocaleString() + suffix;
+      if (progress < 1) requestAnimationFrame(tick);
+    };
+
+    requestAnimationFrame(tick);
+  };
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateCounter(entry.target);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  statValues.forEach(el => observer.observe(el));
+}
+
+/* ============================================================
+   STATS CARDS (4 EXACT SPECIFIED CARDS)
+   ============================================================ */
 function renderStats() {
   const grid = document.querySelector('.stats-grid');
   if (!grid || typeof STATS === 'undefined') return;
 
-  grid.innerHTML = STATS.map(s => `
-    <div class="stat-item reveal">
+  grid.innerHTML = STATS.map((s, i) => `
+    <div class="stat-item reveal" style="transition-delay:${i * 0.08}s">
       <div class="stat-value">${s.value}</div>
       <div class="stat-label">${s.label}</div>
     </div>
   `).join('');
+
+  // Re-run scroll observer so new elements get picked up
+  initScrollAnimations();
 }
 
-/* ------------------------------------------------------------
-   Programs with High-Res Visuals
-   ------------------------------------------------------------ */
+/* ============================================================
+   PROGRAMS SECTION
+   ============================================================ */
 function renderPrograms() {
   const grid = document.querySelector('.programs-grid');
   if (!grid || typeof PROGRAMS === 'undefined') return;
 
-  grid.innerHTML = PROGRAMS.map(p => `
-    <div class="program-card reveal">
+  grid.innerHTML = PROGRAMS.map((p, i) => `
+    <div class="program-card reveal" style="transition-delay:${(i % 3) * 0.1}s">
       <div class="program-img-wrap">
-        <img src="${p.image}" alt="${p.title}" loading="lazy" width="400" height="180">
+        <img src="${p.image}" alt="${p.title}" loading="lazy" width="400" height="190">
         <div class="program-icon-badge">
           ${renderIcon(p.icon)}
         </div>
@@ -172,20 +576,22 @@ function renderPrograms() {
       </div>
     </div>
   `).join('');
+
+  init3DTilt();
 }
 
-/* ------------------------------------------------------------
-   Trainers with Professional Portraits
-   ------------------------------------------------------------ */
+/* ============================================================
+   COACHES SECTION
+   ============================================================ */
 function renderTrainers() {
   const grid = document.querySelector('.trainers-grid');
   if (!grid || typeof TRAINERS === 'undefined') return;
 
-  grid.innerHTML = TRAINERS.map(tr => `
-    <div class="trainer-card reveal">
+  grid.innerHTML = TRAINERS.map((tr, i) => `
+    <div class="trainer-card reveal" style="transition-delay:${i * 0.09}s">
       <div class="trainer-photo-wrap">
-        <img src="${tr.image}" alt="${tr.name} - ${tr.role}" loading="lazy" width="300" height="240">
-        <span class="trainer-exp-badge">${tr.experience} Exp</span>
+        <img src="${tr.image}" alt="${tr.name} - ${tr.role}" loading="lazy" width="300" height="250">
+        <span class="trainer-exp-badge">${tr.experience}</span>
       </div>
       <div class="trainer-body">
         <h3 class="trainer-name">${tr.name}</h3>
@@ -197,19 +603,21 @@ function renderTrainers() {
       </div>
     </div>
   `).join('');
+
+  init3DTilt();
 }
 
-/* ------------------------------------------------------------
-   Pricing Plans
-   ------------------------------------------------------------ */
+/* ============================================================
+   PRICING SECTION (USD MEMBERSHIP TIERS)
+   ============================================================ */
 function renderPricing() {
   const grid = document.querySelector('.pricing-grid');
   if (!grid || typeof PLANS === 'undefined') return;
 
-  grid.innerHTML = PLANS.map(plan => {
+  grid.innerHTML = PLANS.map((plan, i) => {
     const isFeatured = plan.badge ? 'featured' : '';
-    const badgeHtml = plan.badge ? `<span class="pricing-badge badge badge-accent">${plan.badge}</span>` : '';
-    const btnClass = plan.badge ? 'btn btn-primary' : 'btn btn-outline';
+    const badgeHtml  = plan.badge ? `<span class="pricing-badge badge badge-accent">${plan.badge}</span>` : '';
+    const btnClass   = plan.badge ? 'btn btn-primary' : 'btn btn-outline';
 
     const incl = plan.features.map(f => `
       <div class="pricing-feature included">
@@ -226,12 +634,12 @@ function renderPricing() {
     `).join('');
 
     return `
-      <div class="pricing-card ${isFeatured} reveal">
+      <div class="pricing-card ${isFeatured} reveal" style="transition-delay:${i * 0.12}s">
         ${badgeHtml}
         <h3 class="pricing-name">${plan.name}</h3>
         <p class="pricing-desc">${plan.description}</p>
         <div class="pricing-price">
-          <span class="pricing-currency">PKR</span>
+          <span class="pricing-currency">$</span>
           <span class="pricing-amount">${plan.price}</span>
           <span class="pricing-period">${plan.period}</span>
         </div>
@@ -243,33 +651,34 @@ function renderPricing() {
       </div>
     `;
   }).join('');
+
+  init3DTilt();
 }
 
-/* ------------------------------------------------------------
-   Testimonials Slider with Touch & Responsive Sizing
-   ------------------------------------------------------------ */
+/* ============================================================
+   TESTIMONIALS SLIDER
+   ============================================================ */
 let currentSlide = 0;
 let autoSlideInterval = null;
 
 function renderTestimonials() {
-  const track = document.querySelector('.testimonials-track');
-  const dotsContainer = document.querySelector('.testimonials-dots');
-  const prevBtn = document.querySelector('.testimonials-prev');
-  const nextBtn = document.querySelector('.testimonials-next');
+  const track  = document.querySelector('.testimonials-track');
+  const dots   = document.querySelector('.testimonials-dots');
+  const prev   = document.querySelector('.testimonials-prev');
+  const next   = document.querySelector('.testimonials-next');
   if (!track || typeof TESTIMONIALS === 'undefined') return;
 
   track.innerHTML = TESTIMONIALS.map(t => {
     const stars = Array(t.rating).fill(renderIcon('star')).join('');
-
     return `
       <div class="testimonial-slide">
         <div class="testimonial-card">
-          <div class="testimonial-quote-icon">“</div>
+          <div class="testimonial-quote-icon">"</div>
           <div class="testimonial-stars">${stars}</div>
           <p class="testimonial-text">"${t.text}"</p>
           <div class="testimonial-author">
             <div class="testimonial-avatar-wrap">
-              <img src="${t.avatar}" alt="${t.name}" loading="lazy" width="44" height="44">
+              <img src="${t.avatar}" alt="${t.name}" loading="lazy" width="46" height="46">
             </div>
             <div>
               <div class="testimonial-name">${t.name}</div>
@@ -281,91 +690,69 @@ function renderTestimonials() {
     `;
   }).join('');
 
-  const getVisibleCount = () => {
-    if (window.innerWidth <= 768) return 1;
-    if (window.innerWidth <= 1080) return 2;
-    return 3;
-  };
-
-  const totalSlides = TESTIMONIALS.length;
+  const total = TESTIMONIALS.length;
+  const getVisible = () => window.innerWidth <= 768 ? 1 : window.innerWidth <= 1080 ? 2 : 3;
 
   const updateDots = () => {
-    if (!dotsContainer) return;
-    const maxIndex = Math.max(0, totalSlides - getVisibleCount());
-    dotsContainer.innerHTML = Array.from({ length: maxIndex + 1 }).map((_, i) => `
-      <span class="testimonials-dot ${i === currentSlide ? 'active' : ''}" data-index="${i}"></span>
-    `).join('');
-
-    dotsContainer.querySelectorAll('.testimonials-dot').forEach(dot => {
-      dot.addEventListener('click', (e) => {
+    if (!dots) return;
+    const max = Math.max(0, total - getVisible());
+    dots.innerHTML = Array.from({ length: max + 1 }).map((_, i) =>
+      `<span class="testimonials-dot ${i === currentSlide ? 'active' : ''}" data-index="${i}"></span>`
+    ).join('');
+    dots.querySelectorAll('.testimonials-dot').forEach(d =>
+      d.addEventListener('click', e => {
         currentSlide = parseInt(e.target.dataset.index, 10);
         updateSlider();
-        restartAutoSlide();
-      });
-    });
+        restartAuto();
+      })
+    );
   };
 
   const updateSlider = () => {
-    const visible = getVisibleCount();
-    const maxIndex = Math.max(0, totalSlides - visible);
-    if (currentSlide > maxIndex) currentSlide = maxIndex;
-    if (currentSlide < 0) currentSlide = 0;
-
-    const slideWidthPct = 100 / visible;
-    const offset = -(currentSlide * slideWidthPct);
-    track.style.transform = `translateX(${offset}%)`;
-
+    const v = getVisible();
+    const max = Math.max(0, total - v);
+    currentSlide = Math.max(0, Math.min(currentSlide, max));
+    track.style.transform = `translateX(${-(currentSlide * 100 / v)}%)`;
     updateDots();
   };
 
-  if (prevBtn) {
-    prevBtn.addEventListener('click', () => {
-      const maxIndex = Math.max(0, totalSlides - getVisibleCount());
-      currentSlide = currentSlide > 0 ? currentSlide - 1 : maxIndex;
-      updateSlider();
-      restartAutoSlide();
-    });
-  }
+  if (prev) prev.addEventListener('click', () => {
+    const max = Math.max(0, total - getVisible());
+    currentSlide = currentSlide > 0 ? currentSlide - 1 : max;
+    updateSlider(); restartAuto();
+  });
 
-  if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
-      const maxIndex = Math.max(0, totalSlides - getVisibleCount());
-      currentSlide = currentSlide < maxIndex ? currentSlide + 1 : 0;
-      updateSlider();
-      restartAutoSlide();
-    });
-  }
+  if (next) next.addEventListener('click', () => {
+    const max = Math.max(0, total - getVisible());
+    currentSlide = currentSlide < max ? currentSlide + 1 : 0;
+    updateSlider(); restartAuto();
+  });
 
-  const startAutoSlide = () => {
+  const startAuto = () => {
     autoSlideInterval = setInterval(() => {
-      const maxIndex = Math.max(0, totalSlides - getVisibleCount());
-      currentSlide = currentSlide < maxIndex ? currentSlide + 1 : 0;
+      const max = Math.max(0, total - getVisible());
+      currentSlide = currentSlide < max ? currentSlide + 1 : 0;
       updateSlider();
-    }, 5000);
+    }, 5500);
   };
 
-  const restartAutoSlide = () => {
-    clearInterval(autoSlideInterval);
-    startAutoSlide();
-  };
+  const restartAuto = () => { clearInterval(autoSlideInterval); startAuto(); };
 
-  window.addEventListener('resize', () => {
-    updateSlider();
-  }, { passive: true });
-
+  window.addEventListener('resize', updateSlider, { passive: true });
   updateSlider();
-  startAutoSlide();
+  startAuto();
+  init3DTilt();
 }
 
-/* ------------------------------------------------------------
-   Gallery with Real Images & Filtering
-   ------------------------------------------------------------ */
+/* ============================================================
+   GALLERY FILTERING
+   ============================================================ */
 function renderGallery() {
-  const grid = document.querySelector('.gallery-grid');
+  const grid    = document.querySelector('.gallery-grid');
   const filters = document.querySelectorAll('.gallery-filter');
   if (!grid || typeof GALLERY_ITEMS === 'undefined') return;
 
-  function displayItems(cat) {
+  const display = cat => {
     const items = cat === 'all' ? GALLERY_ITEMS : GALLERY_ITEMS.filter(i => i.category === cat);
     grid.innerHTML = items.map(item => `
       <div class="gallery-item reveal" data-category="${item.category}">
@@ -376,30 +763,26 @@ function renderGallery() {
         </div>
       </div>
     `).join('');
-
-    // re-observe new items for smooth animations
     initScrollAnimations();
-  }
+  };
 
-  filters.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filters.forEach(f => f.classList.remove('active'));
-      btn.classList.add('active');
-      displayItems(btn.dataset.filter);
-    });
-  });
+  filters.forEach(btn => btn.addEventListener('click', () => {
+    filters.forEach(f => f.classList.remove('active'));
+    btn.classList.add('active');
+    display(btn.dataset.filter);
+  }));
 
-  displayItems('all');
+  display('all');
 }
 
-/* ------------------------------------------------------------
-   FAQ Accordion
-   ------------------------------------------------------------ */
+/* ============================================================
+   FAQ ACCORDION
+   ============================================================ */
 function renderFAQs() {
   const grid = document.querySelector('.faq-grid');
   if (!grid || typeof FAQS === 'undefined') return;
 
-  grid.innerHTML = FAQS.map((faq) => `
+  grid.innerHTML = FAQS.map(faq => `
     <div class="faq-item reveal">
       <div class="faq-question" role="button" tabindex="0" aria-expanded="false">
         <span class="faq-q-text">${faq.q}</span>
@@ -415,30 +798,24 @@ function renderFAQs() {
     const item = q.closest('.faq-item');
     const toggle = () => {
       const isOpen = item.classList.toggle('open');
-      q.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      q.setAttribute('aria-expanded', isOpen);
     };
-
     q.addEventListener('click', toggle);
-    q.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        toggle();
-      }
-    });
+    q.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
   });
 }
 
-/* ------------------------------------------------------------
-   Operating Hours
-   ------------------------------------------------------------ */
+/* ============================================================
+   OPERATING HOURS
+   ============================================================ */
 function renderHours() {
   const container = document.querySelector('.hours-table');
   if (!container || typeof GYM === 'undefined') return;
 
   container.innerHTML = GYM.hours.map(h => {
-    const isLadies = h.days.includes('Ladies');
+    const special = h.days.includes('Recovery') || h.days.includes('VIP');
     return `
-      <div class="hours-row ${isLadies ? 'ladies-row' : ''}">
+      <div class="hours-row ${special ? 'special-row' : ''}">
         <span class="hours-day">${h.days}</span>
         <span class="hours-time">${h.time}</span>
       </div>
@@ -446,83 +823,72 @@ function renderHours() {
   }).join('');
 }
 
-/* ------------------------------------------------------------
-   Contact Form Validation & Feedback
-   ------------------------------------------------------------ */
+/* ============================================================
+   CONTACT & VIP PASS FORM
+   ============================================================ */
 function initContactForm() {
-  const form = document.querySelector('.contact-form');
+  const form       = document.querySelector('.contact-form');
   const successBox = document.querySelector('.form-success');
   if (!form) return;
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', e => {
     e.preventDefault();
-
-    const name = form.querySelector('#name')?.value.trim();
+    const name  = form.querySelector('#name')?.value.trim();
     const phone = form.querySelector('#phone')?.value.trim();
-    const plan = form.querySelector('#plan')?.value || 'Elite Performance';
+    const plan  = form.querySelector('#plan')?.value || 'Elite Performance Tier';
 
     if (!name || !phone) {
-      alert('Please provide your name and phone number so we can book your pass.');
+      alert('Please provide your name and phone number to claim your VIP Day Pass.');
       return;
     }
 
-    const submitBtn = form.querySelector('.form-submit');
-    const origText = submitBtn.textContent;
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Submitting...';
+    const btn = form.querySelector('.form-submit');
+    btn.disabled = true;
+    btn.textContent = 'Processing VIP Pass...';
 
     setTimeout(() => {
-      submitBtn.disabled = false;
-      submitBtn.textContent = origText;
+      btn.disabled = false;
+      btn.textContent = 'CLAIM VIP PASS';
       if (successBox) {
-        successBox.textContent = `Thank you, ${name}! Your free 1-day pass for FitCore Gym North Nazimabad is confirmed. We will reach you at ${phone} to schedule your workout.`;
+        successBox.textContent = `Welcome, ${name}! Your complimentary VIP Day Pass for The Lab Athletic Club on Sunset Blvd has been confirmed. Our member concierge will reach you at ${phone} to schedule your private tour and workout.`;
         successBox.classList.add('visible');
       }
       form.reset();
-
-      setTimeout(() => {
-        if (successBox) successBox.classList.remove('visible');
-      }, 8000);
-    }, 800);
+      setTimeout(() => { if (successBox) successBox.classList.remove('visible'); }, 8500);
+    }, 900);
   });
 }
 
-/* ------------------------------------------------------------
-   Back To Top Button
-   ------------------------------------------------------------ */
+/* ============================================================
+   BACK TO TOP BUTTON
+   ============================================================ */
 function initBackToTop() {
   const btn = document.querySelector('.back-top');
   if (!btn) return;
 
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 350) {
-      btn.classList.add('visible');
-    } else {
-      btn.classList.remove('visible');
-    }
+    btn.classList.toggle('visible', window.scrollY > 350);
   }, { passive: true });
 
-  btn.addEventListener('click', (e) => {
+  btn.addEventListener('click', e => {
     e.preventDefault();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 }
 
-/* ------------------------------------------------------------
-   Scroll Reveal Observer
-   ------------------------------------------------------------ */
+/* ============================================================
+   SCROLL REVEAL OBSERVER (STAGGERED)
+   ============================================================ */
 function initScrollAnimations() {
   const observer = new IntersectionObserver((entries, obs) => {
-    entries.forEach(entry => {
+    entries.forEach((entry, i) => {
       if (entry.isIntersecting) {
+        // Apply stagger from custom transition-delay if already set
         entry.target.classList.add('visible');
         obs.unobserve(entry.target);
       }
     });
-  }, {
-    threshold: 0.1,
-    rootMargin: '0px 0px -30px 0px'
-  });
+  }, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
 
   document.querySelectorAll('.reveal:not(.visible)').forEach(el => observer.observe(el));
 }

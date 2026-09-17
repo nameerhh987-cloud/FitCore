@@ -1,31 +1,33 @@
-﻿// ============================================================
-// FitCore Gym North Nazimabad - Master Site Data
+// ============================================================
+// THE LAB ATHLETIC CLUB — Master Site Data
+// Sunset Blvd • Los Angeles, CA
 // ============================================================
 
 const GYM = {
-  name: "FitCore Gym",
-  tagline: "North Nazimabad",
-  fullName: "FitCore Gym North Nazimabad",
-  phone: "0336 0895961",
-  phoneHref: "tel:+923360895961",
-  email: "fitcorenorthnazimabad@gmail.com",
+  name: "THE LAB ATHLETIC CLUB",
+  shortName: "THE LAB",
+  tagline: "SUNSET BLVD • LOS ANGELES, CA",
+  fullName: "The Lab Athletic Club Sunset Strip",
+  phone: "(323) 370-9110",
+  phoneHref: "tel:+13233709110",
+  email: "vip@thelabathletic.com",
   address: {
-    line1: "Plot D9, First Floor, Block A",
-    line2: "North Nazimabad Town",
-    city: "Karachi, 75400",
-    country: "Pakistan",
-    mapLink: "https://maps.google.com/?q=North+Nazimabad+Block+A+Karachi"
+    line1: "8305 Sunset Blvd Ste E",
+    line2: "Sunset Strip, West Hollywood",
+    city: "Los Angeles, CA 90069",
+    country: "United States",
+    mapLink: "https://maps.google.com/?q=8305+Sunset+Blvd+Ste+E+Los+Angeles+CA+90069"
   },
   hours: [
     { days: "Mon - Fri", time: "5:00 AM - 11:00 PM" },
     { days: "Saturday",  time: "6:00 AM - 10:00 PM" },
-    { days: "Sunday",    time: "7:00 AM - 9:00 PM"  },
-    { days: "Ladies Only", time: "9:00 AM - 1:00 PM (Daily)" }
+    { days: "Sunday",    time: "7:00 AM - 8:00 PM"  },
+    { days: "Recovery Suite", time: "8:00 AM - 9:00 PM (Daily)" }
   ],
   socials: {
-    whatsapp:  "https://wa.me/923360895961",
     instagram: "https://instagram.com",
-    facebook:  "https://facebook.com"
+    facebook:  "https://facebook.com",
+    twitter:   "https://twitter.com"
   }
 };
 
@@ -33,209 +35,209 @@ const NAV_LINKS = [
   { label: "Home",        href: "#hero"         },
   { label: "About",       href: "#about"        },
   { label: "Programs",    href: "#programs"     },
-  { label: "Trainers",    href: "#trainers"     },
-  { label: "Pricing",     href: "#pricing"      },
+  { label: "Coaches",     href: "#trainers"     },
+  { label: "Membership",  href: "#pricing"      },
   { label: "Reviews",     href: "#testimonials" },
-  { label: "Gallery",     href: "#gallery"      },
+  { label: "Facility",    href: "#gallery"      },
   { label: "FAQ",         href: "#faq"          },
   { label: "Contact",     href: "#contact"      }
 ];
 
 const STATS = [
-  { value: "1,200+", label: "Active Members",      icon: "users" },
-  { value: "15+",    label: "Certified Coaches",   icon: "trophy" },
-  { value: "30+",    label: "Weekly Classes",      icon: "zap" },
-  { value: "8+",     label: "Years in Karachi",    icon: "shield" }
+  { value: "4.9★",  label: "420+ REVIEWS",    icon: "star"   },
+  { value: "ELITE", label: "PRO LAB GEAR",    icon: "zap"    },
+  { value: "LA",    label: "SUNSET BLVD",     icon: "map-pin"},
+  { value: "FREE",  label: "VIP DAY PASS",    icon: "shield" }
 ];
 
 const PROGRAMS = [
   {
-    id: "strength",
+    id: "biomechanics",
     icon: "dumbbell",
-    title: "Strength & Powerlifting",
-    description: "State-of-the-art calibrated plates, Olympic barbells, and heavy-duty power cages for maximal strength progression and hypertrophy.",
-    tags: ["Olympic Barbells", "Deadlift Platforms", "Hypertrophy"],
+    title: "Biomechanic Strength & Hypertrophy",
+    description: "Engineered hypertrophy leveraging customized resistance curves, calibrated Olympic platforms, and high-load power racks for maximum muscular efficiency.",
+    tags: ["Olympic Racks", "Calibrated Plates", "Hypertrophy"],
     image: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=800&q=80"
   },
   {
-    id: "cardio",
+    id: "conditioning",
     icon: "heart-pulse",
-    title: "Cardio & Conditioning",
-    description: "High-end curved treadmills, stairmasters, assault bikes, and rowing ergometers to build unmatched cardiovascular endurance.",
-    tags: ["HIIT", "Assault Bikes", "Stairmasters"],
+    title: "Metabolic Conditioning & VO2 Max",
+    description: "High-intensity athletic conditioning protocols utilizing curved manual treadmills, Concept2 ergometers, assault bikes, and targeted heart-rate zone tracking.",
+    tags: ["VO2 Max", "Curved Ergometers", "Zone Training"],
     image: "https://images.unsplash.com/photo-1434596922112-19c563067271?auto=format&fit=crop&w=800&q=80"
   },
   {
     id: "functional",
     icon: "zap",
-    title: "Functional & Cross-Training",
-    description: "Real-world athletic movement patterns on our dedicated turf track. Kettlebells, battle ropes, plyo boxes, and sled push areas.",
-    tags: ["Sled Push", "Battle Ropes", "Turf Track"],
+    title: "Pro Athlete Functional Turf",
+    description: "Dynamic explosive power training on our 40-yard indoor turf. Sled sprints, rotational kettlebell work, plyometrics, and agility acceleration ladders.",
+    tags: ["Sled Sprints", "Kettlebell Flow", "Agility Turf"],
     image: "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?auto=format&fit=crop&w=800&q=80"
   },
   {
     id: "combat",
     icon: "shield",
-    title: "Boxing & Combat Sports",
-    description: "Elevate discipline, hand speed, and explosive stamina on our regulation boxing ring, heavy bags, and speed bag stations.",
-    tags: ["Boxing Ring", "Heavy Bags", "Footwork"],
+    title: "Sunset Strip Boxing & Combat",
+    description: "Championship-grade boxing ring, water-filled heavy bags, speed spheres, and private striking coaches developing elite hand speed, stamina, and mental grit.",
+    tags: ["Boxing Ring", "Striking Suite", "Footwork Drill"],
     image: "https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?auto=format&fit=crop&w=800&q=80"
   },
   {
-    id: "yoga",
+    id: "recovery",
     icon: "leaf",
-    title: "Yoga & Deep Recovery",
-    description: "Restore joint mobility, accelerate post-workout recovery, and reduce injury risk through guided mobility and breathing sessions.",
-    tags: ["Mobility Flow", "Active Recovery", "Flexibility"],
+    title: "Hyperbaric, Cryo & Athletic Mobility",
+    description: "Accelerate central nervous system recovery through infrared saunas, cold plunge tubs, percussive therapy, and guided myofascial mobility clinics.",
+    tags: ["Cold Plunge", "Infrared Sauna", "Myofascial Release"],
     image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80"
   },
   {
     id: "nutrition",
     icon: "apple",
-    title: "Personal Nutrition Coaching",
-    description: "Individualized macronutrient targets, clean meal planning, and bi-weekly body composition scans for guaranteed body recomposition.",
-    tags: ["Macro Tracking", "Fat Loss", "Clean Diet"],
+    title: "Precision Sports Nutrition & DEXA",
+    description: "Clinical DEXA body composition scanning paired with bio-individualized macronutrient periodization designed for Hollywood athletes and executives.",
+    tags: ["DEXA Scans", "Macro Periodization", "Bio-Performance"],
     image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=80"
   }
 ];
 
 const TRAINERS = [
   {
-    name: "Hassan Malik",
-    role: "Head Strength Coach",
-    experience: "9+ Years",
-    specialties: ["Powerlifting", "Hypertrophy", "Biomechanics"],
-    bio: "Certified strength specialist who has coached national powerlifting champions and guided hundreds of successful muscle transformations.",
-    initials: "HM",
+    name: "Marcus Vance, CSCS",
+    role: "Director of Athletic Performance",
+    experience: "12+ Years",
+    specialties: ["Biomechanics", "Olympic Lifting", "Pro Athlete Prep"],
+    bio: "Former NCAA Division I strength specialist who has prepared championship fighters, NFL athletes, and high-performance film talent on Sunset Blvd.",
+    initials: "MV",
     image: "https://images.unsplash.com/photo-1567013127542-490d757e51fc?auto=format&fit=crop&w=600&q=80"
   },
   {
-    name: "Sana Raza",
-    role: "Cardio & Yoga Expert",
-    experience: "6+ Years",
-    specialties: ["HIIT", "Mobility", "Women's Fitness"],
-    bio: "Leads our dedicated ladies sessions and mobility clinics. Passionate about posture correction, high metabolic burns, and functional agility.",
-    initials: "SR",
+    name: "Elena Rostova",
+    role: "Head of Conditioning & Movement",
+    experience: "8+ Years",
+    specialties: ["VO2 Max Intervals", "Mobility Science", "Kettlebell Agility"],
+    bio: "Pioneered functional athletic flow systems. Specializes in building unshakeable cardiovascular thresholds and dynamic hip/spine mobility.",
+    initials: "ER",
     image: "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=600&q=80"
   },
   {
-    name: "Bilal Qureshi",
-    role: "Boxing & MMA Coach",
-    experience: "11+ Years",
-    specialties: ["Boxing", "Kickboxing", "Conditioning"],
-    bio: "Former national boxing medalist with over a decade of combat coaching experience. Builds ironclad mental discipline and sharp reflexes.",
-    initials: "BQ",
+    name: "Julian 'The Apex' Cruz",
+    role: "Head Combat & Boxing Coach",
+    experience: "14+ Years",
+    specialties: ["Pro Boxing", "Striking Biomechanics", "Reflex Conditioning"],
+    bio: "Golden Gloves veteran and elite striking technician. Trains members in explosive rotational power, counter-punching dynamics, and core resilience.",
+    initials: "JC",
     image: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=600&q=80"
   },
   {
-    name: "Zara Ahmed",
-    role: "Clinical Nutritionist & Coach",
-    experience: "7+ Years",
-    specialties: ["Diet Planning", "Recomposition", "Metabolism"],
-    bio: "Certified sports nutritionist helping members build sustainable nutrition habits without starving, tailored specifically to Pakistani dietary lifestyles.",
-    initials: "ZA",
+    name: "Dr. Chloe Sterling, MS, RD",
+    role: "Performance Nutrition & Recovery",
+    experience: "9+ Years",
+    specialties: ["Metabolic Testing", "DEXA Analysis", "Cellular Nutrition"],
+    bio: "Specialist in metabolic rate testing and anti-inflammatory sports nutrition. Customizes recovery protocols and nutrient timing for optimum body composition.",
+    initials: "CS",
     image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=600&q=80"
   }
 ];
 
 const PLANS = [
   {
-    id: "basic",
-    name: "Basic Access",
-    price: "3,500",
+    id: "club-access",
+    name: "Club Access",
+    price: "175",
     period: "/ month",
     badge: null,
-    description: "Self-driven gym floor access for consistent everyday lifting.",
+    description: "Full access to our state-of-the-art Sunset Blvd training arena and recovery zones.",
     features: [
-      "Full Gym Floor & Machine Access",
-      "Free Weights & Olympic Cages",
-      "Cardio Deck & HIIT Machines",
-      "Locker & Shower Access",
-      "Initial Fitness Assessment"
+      "Unlimited Main Floor & Turf Access",
+      "Calibrated Olympic Racks & Free Weights",
+      "Curved Treadmills & Cardio Deck",
+      "Luxury Spa Showers & Keyless Lockers",
+      "Complimentary Baseline DEXA Scan"
     ],
     excluded: [
-      "Group Classes (Boxing & Yoga)",
-      "Dedicated 1-on-1 Personal Trainer",
-      "Personalized Nutrition Meal Plan"
+      "Private Boxing Ring Sparring Clinics",
+      "1-on-1 Dedicated Strength Coach",
+      "Cryotherapy & Cold Plunge Sessions"
     ],
-    cta: "Join Basic Plan"
+    cta: "Select Club Access"
   },
   {
-    id: "elite",
+    id: "elite-performance",
     name: "Elite Performance",
-    price: "6,500",
+    price: "265",
     period: "/ month",
     badge: "Most Popular",
-    description: "Comprehensive package for members who want rapid, noticeable results.",
+    description: "Comprehensive athletic conditioning engineered for maximum physical transformation.",
     features: [
-      "Everything in Basic Access",
-      "Unlimited Group Combat & Yoga Classes",
-      "2x Monthly 1-on-1 PT Sessions",
-      "Diet & Macro Guidance Plan",
-      "Body Composition Scans",
-      "Priority Equipment Access",
-      "Towel & Premium Locker Service"
+      "Everything in Club Access",
+      "Unlimited Boxing & Conditioning Classes",
+      "2x Monthly 1-on-1 Performance Coaching",
+      "Full Cryotherapy & Cold Plunge Access",
+      "Bi-Weekly DEXA & Metabolic Scans",
+      "Precision Macro Nutrition Roadmap",
+      "Priority Sunset Blvd Valet & Towel Service"
     ],
     excluded: [
-      "24/7 Dedicated Coach On-Call"
+      "24/7 Private Coach Concierge"
     ],
-    cta: "Join Elite Plan"
+    cta: "Claim Elite Membership"
   },
   {
-    id: "pro",
-    name: "Pro Athlete",
-    price: "10,000",
+    id: "vip-black",
+    name: "VIP Black Tier",
+    price: "425",
     period: "/ month",
-    badge: "Best Value",
-    description: "The ultimate transformation experience with full personal coaching.",
+    badge: "VIP Exclusive",
+    description: "The premier private training experience with dedicated coach concierge and executive suites.",
     features: [
       "Everything in Elite Performance",
-      "Weekly 1-on-1 Personal Training",
-      "Full Custom Nutrition & Macro Plan",
-      "Weekly Body Recomposition Reports",
-      "Exclusive Boxing Ring Sparring Sessions",
-      "Direct Coach Access via WhatsApp",
-      "Free Guest Passes (2 per month)"
+      "Weekly 1-on-1 Private Training Sessions",
+      "Unlimited Recovery & Infrared Sauna Suites",
+      "24/7 Dedicated Coach Concierge Access",
+      "Custom Macro Meal Prep Partner Discounts",
+      "Exclusive Sunset Rooftop Lounge Access",
+      "4 Monthly Complimentary VIP Guest Passes"
     ],
     excluded: [],
-    cta: "Go Pro Athlete"
+    cta: "Apply For VIP Black"
   }
 ];
 
 const TESTIMONIALS = [
   {
-    name: "Ahmed Siddiqui",
-    role: "Member for 1.5 Years",
+    name: "Christian Vance",
+    role: "Film Producer & West Hollywood Resident",
     rating: 5,
-    text: "FitCore completely transformed my physique. Down 22kg in 7 months with Coach Hassan on the Elite plan. The machinery here is unmatched in North Nazimabad.",
+    text: "The Lab is hands down the most refined, serious athletic facility on Sunset Blvd. The machinery is state-of-the-art, the vibe is intensely focused, and Marcus pushed my lifting to another level.",
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80"
   },
   {
-    name: "Fatima Noor",
-    role: "Member for 1 Year",
+    name: "Sienna Martinez",
+    role: "Triathlete & Fitness Model",
     rating: 5,
-    text: "The dedicated ladies timings from 9am to 1pm are so comfortable and clean. Sana is an incredible coach who genuinely cares about each member's form and safety.",
+    text: "Between the cold plunge suites, curved ergometers, and Elena's mobility coaching, my recovery time halved. There is zero clutter or fluff here—pure science-driven performance.",
     avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80"
   },
   {
-    name: "Usman Tariq",
-    role: "Powerlifter, 3 Years",
+    name: "David Sterling",
+    role: "Executive Athlete, 2 Years at The Lab",
     rating: 5,
-    text: "True Olympic barbells, calibrated steel plates, and chalk-friendly power cages. If you are serious about raw strength in Karachi, FitCore is the only gym to consider.",
+    text: "Julian's boxing conditioning is unmatched. If you work in LA and need an elite environment where serious work gets done without pretension, The Lab Athletic Club is the gold standard.",
     avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80"
   },
   {
-    name: "Mariam Baig",
-    role: "Fitness Enthusiast",
+    name: "Victoria Chen",
+    role: "Performance Member",
     rating: 5,
-    text: "Zara's nutrition coaching alone made my membership worth every rupee. I learned how to eat nutritious Pakistani meals without giving up flavor while losing body fat.",
+    text: "Dr. Sterling's DEXA analysis and nutrition plan reshaped my physique in 12 weeks. The private showers, pristine equipment, and Sunset Strip location make it effortless to train daily.",
     avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80"
   },
   {
-    name: "Khalid Hassan",
-    role: "Boxing Member",
+    name: "Liam O'Connor",
+    role: "Competitive Powerlifter",
     rating: 5,
-    text: "Coach Bilal's combat conditioning is relentless. My stamina and hand-eye coordination improved dramatically. The vibe in this gym pushes you to your absolute best.",
+    text: "Calibrated plates, competition benches, heavy dumbells up to 150 lbs, and rock-solid power cages. Finally, a premier Hollywood club built for real strength athletes.",
     avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80"
   }
 ];
@@ -243,55 +245,55 @@ const TESTIMONIALS = [
 const GALLERY_ITEMS = [
   {
     category: "facility",
-    label: "Main Gym Floor & Dumbbell Deck",
+    label: "Main Biomechanics Training Arena",
     icon: "dumbbell",
     image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=1200&q=80"
   },
   {
     category: "facility",
-    label: "Free Weights & Heavy Barbells",
+    label: "Olympic Platforms & Calibrated Free Weights",
     icon: "layers",
     image: "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=800&q=80"
   },
   {
     category: "class",
-    label: "Group HIIT & Functional Arena",
+    label: "40-Yard Athletic Sprint Turf",
     icon: "users",
     image: "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80"
   },
   {
     category: "class",
-    label: "Yoga, Mobility & Recovery",
+    label: "Cold Plunge & Cryo Recovery Suite",
     icon: "leaf",
     image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80"
   },
   {
     category: "combat",
-    label: "Official Boxing Ring & Bags",
+    label: "Championship Boxing Ring & Heavy Bags",
     icon: "shield",
     image: "https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?auto=format&fit=crop&w=1200&q=80"
   },
   {
     category: "combat",
-    label: "MMA & Striking Floor",
+    label: "Pro Striking & Sparring Deck",
     icon: "zap",
     image: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=800&q=80"
   },
   {
     category: "facility",
-    label: "High-Tech Cardio Suite",
+    label: "Cardio Loft & VO2 Max Suite",
     icon: "heart-pulse",
     image: "https://images.unsplash.com/photo-1576678927484-cc907957088c?auto=format&fit=crop&w=800&q=80"
   },
   {
     category: "class",
-    label: "1-on-1 Personal Training",
+    label: "1-on-1 Elite Coach Biomechanics Session",
     icon: "user-check",
     image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=800&q=80"
   },
   {
     category: "facility",
-    label: "Locker Rooms & Hydration Bar",
+    label: "Executive Locker Rooms & Recovery Lounge",
     icon: "check-circle",
     image: "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&w=800&q=80"
   }
@@ -299,27 +301,27 @@ const GALLERY_ITEMS = [
 
 const FAQS = [
   {
-    q: "Where exactly in North Nazimabad is FitCore Gym located?",
-    a: "We are situated at Plot D9, First floor, Block A North Nazimabad Town, Karachi, 75400. We are easily accessible with dedicated parking for cars and motorbikes."
+    q: "Where is The Lab Athletic Club located on Sunset Blvd?",
+    a: "We are located at 8305 Sunset Blvd Ste E, Los Angeles, CA 90069 on the iconic Sunset Strip in West Hollywood. Dedicated validated parking and private entry are available for all club members."
   },
   {
-    q: "What are the dedicated hours for female members?",
-    a: "We offer completely private, female-only timings daily from 9:00 AM to 1:00 PM with certified female trainers and full access to all floors, free weights, and cardio equipment."
+    q: "How do I claim my complimentary VIP Day Pass?",
+    a: "Select 'CLAIM VIP PASS' on this page or call our front desk directly at (323) 370-9110. Your pass grants full floor access, facility tour, and an introductory coach assessment."
   },
   {
-    q: "Can I try out the gym before committing to a membership?",
-    a: "Yes! We provide a complimentary 1-Day Free Trial Pass. Simply fill out our contact form or call 0336 0895961 to book your free facility tour and trial workout."
+    q: "What equipment and facilities does The Lab feature?",
+    a: "Our club features competition-grade Olympic cages, calibrated steel plates, custom dumbbells up to 150 lbs, a 40-yard athletic sprint turf, championship boxing ring, curved manual treadmills, cold plunges, infrared saunas, and private executive locker suites."
   },
   {
-    q: "Is there an admission or registration fee?",
-    a: "Standard registration is PKR 1,000 which includes your baseline body composition test and initial coach consultation. This fee is frequently waived during our special seasonal promotions."
+    q: "Are personal training sessions included with membership?",
+    a: "Our Elite Performance tier includes 2 monthly 1-on-1 private coaching sessions, while our VIP Black Tier features weekly sessions plus 24/7 coach concierge access. Additional sessions can be booked a la carte with our master instructors."
   },
   {
-    q: "Can I pause or freeze my membership if I travel?",
-    a: "Yes, all active monthly and quarterly members can pause their memberships for up to 30 days per calendar year with a quick 3-day advance notice."
+    q: "Can I pause my membership if I am traveling or filming on location?",
+    a: "Yes. Active members may freeze their accounts for up to 60 days per calendar year with simple advance notice to member services."
   },
   {
-    q: "What brand of equipment do you have?",
-    a: "Our facility is equipped with heavy-gauge commercial biomechanic equipment, competition power cages, Olympic barbells, calibrated iron plates, and commercial cardio stations."
+    q: "What are your operating hours?",
+    a: "The Lab is open Monday through Friday from 5:00 AM to 11:00 PM, Saturday from 6:00 AM to 10:00 PM, and Sunday from 7:00 AM to 8:00 PM. Our Recovery Suite is open daily from 8:00 AM to 9:00 PM."
   }
 ];
